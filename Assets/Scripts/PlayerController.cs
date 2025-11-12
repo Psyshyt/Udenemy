@@ -20,6 +20,14 @@ public class PlayerController : MonoBehaviour
 
     public Animator anim;
 
+
+    public bool isKnocking;
+    public float knockBackLenght = .5f;
+    private float knockBackCounter;
+    public Vector2 knockBackPower;
+    
+    
+    public GameObject[] playerPieces;
     void Awake()
     {
         instance = this;
@@ -31,42 +39,78 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        
-        float yStore = moveDirection.y;
-        //moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        moveDirection = (transform.forward * Input.GetAxis("Vertical")) + (transform.right * Input.GetAxisRaw("Horizontal"));
-        moveDirection.Normalize();
-        moveDirection = moveDirection * moveSpeed;
-        moveDirection.y = yStore;
-
-        if (charController.isGrounded)
+        if (!isKnocking)
         {
-            moveDirection.y = -1f;
-            if (Input.GetButtonDown("Jump"))
+            float yStore = moveDirection.y;
+            //moveDirection = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+            moveDirection = (transform.forward * Input.GetAxis("Vertical")) +
+                            (transform.right * Input.GetAxisRaw("Horizontal"));
+            moveDirection.Normalize();
+            moveDirection = moveDirection * moveSpeed;
+            moveDirection.y = yStore;
+
+            if (charController.isGrounded)
             {
-                moveDirection.y = jumpForce;
-            } 
+                moveDirection.y = -1f;
+                if (Input.GetButtonDown("Jump"))
+                {
+                    moveDirection.y = jumpForce;
+                }
+            }
+
+
+            moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
+
+            //transform.position = transform.position + (moveDirection * Time.deltaTime * moveSpeed);
+
+            charController.Move(moveDirection * Time.deltaTime);
+
+            if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+
+            {
+                transform.rotation = Quaternion.Euler(0f, theCam.transform.rotation.eulerAngles.y, 0f);
+                Quaternion newRotation = Quaternion.LookRotation(new Vector3(moveDirection.x, 0, moveDirection.z));
+                //playerModel.transform.rotation = newRotation;
+                playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation,
+                    rotateSpeed * Time.deltaTime);
+
+
+            }
         }
-        
-        
-        moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
-        
-        //transform.position = transform.position + (moveDirection * Time.deltaTime * moveSpeed);
 
-        charController.Move(moveDirection * Time.deltaTime);
-
-        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
-
+        if (isKnocking)
         {
-            transform.rotation = Quaternion.Euler(0f, theCam.transform.rotation.eulerAngles.y, 0f);
-            Quaternion newRotation = Quaternion.LookRotation(new  Vector3(moveDirection.x, 0, moveDirection.z));
-            //playerModel.transform.rotation = newRotation;
-            playerModel.transform.rotation = Quaternion.Slerp(playerModel.transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
+            knockBackCounter -= Time.deltaTime;
+            float yStore = moveDirection.y;
+            moveDirection = playerModel.transform.forward * -knockBackPower.x;
+            moveDirection.y = yStore;
             
+            if (charController.isGrounded)
+            {
+                moveDirection.y = -1f;
+            }
+            
+            moveDirection.y += Physics.gravity.y * Time.deltaTime * gravityScale;
+            
+            
+            charController.Move(moveDirection * Time.deltaTime);
 
+            if (knockBackCounter <= 0)
+            {
+                isKnocking = false;
+            }
         }
 
         anim.SetFloat("Speed", Mathf.Abs(moveDirection.x) + Mathf.Abs(moveDirection.z));
         anim.SetBool("Grounded",charController.isGrounded);
+    }
+
+    public void KnockBack()
+    {
+        isKnocking = true;
+        knockBackCounter = knockBackLenght;
+        Debug.Log("KnockBack");
+        moveDirection.y = knockBackPower.y;
+        charController.Move(moveDirection *  Time.deltaTime);
     }
 }

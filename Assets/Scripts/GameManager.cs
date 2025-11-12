@@ -36,10 +36,21 @@ public class GameManager : MonoBehaviour
     public IEnumerator RespawnCo()
     {
         PlayerController.instance.gameObject.SetActive(false);
+
+        UIManager.instance.fadeToBlack = true;
+        HealthManager.instance.ResetHealth();
+        
         yield return new WaitForSeconds(2f);
         
+        UIManager.instance.fadeFromBlack = true;
         PlayerController.instance.transform.position = respawnPosition;
         
         PlayerController.instance.gameObject.SetActive(true);
+    }
+
+    public void SetSpawnPoint(Vector3 newSpawnPoint)
+    {
+        respawnPosition = newSpawnPoint;
+        Debug.Log("Spawn Point Set");
     }
 }
