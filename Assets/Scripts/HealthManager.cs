@@ -27,14 +27,25 @@ public class HealthManager : MonoBehaviour
         if (invincConter > 0)
         {
             invincConter -= Time.deltaTime;
-
-            if (invincConter <= 1)
+            
+            for (int i = 0; i < PlayerController.instance.playerPieces.Length; i++)
             {
-                for (int i = 0; i < PlayerController.instance.playerPieces.Length; i++)
+                if(Mathf.Floor(invincConter * 5f) % 2 == 0)
                 {
-                    PlayerController.instance.playerPieces[i].SetActive(true);
+                    PlayerController.instance.playerPieces[i].SetActive(true);  
                 }
+                else
+                {
+                    PlayerController.instance.playerPieces[i].SetActive(false);  
+                }
+
+                if (invincConter <= 0)
+                {
+                    PlayerController.instance.playerPieces[i].SetActive(true); 
+                }
+               
             }
+            
         }
     }
 
@@ -54,11 +65,6 @@ public class HealthManager : MonoBehaviour
             {
                 PlayerController.instance.KnockBack();
                 invincConter = invincbleLenght;
-
-                for (int i = 0; i < PlayerController.instance.playerPieces.Length; i++)
-                {
-                    PlayerController.instance.playerPieces[i].SetActive(false);
-                }
             }
         }
     }
