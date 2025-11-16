@@ -9,6 +9,9 @@ public class UIManager : MonoBehaviour
     public float fadeSpeed = 2f;
     public bool fadeToBlack, fadeFromBlack;
 
+    public Image healthImage;
+    public Text healText;
+
     void Awake()
     {
         instance = this;
@@ -35,5 +38,8 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
+
+    
     
 }

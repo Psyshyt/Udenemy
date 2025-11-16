@@ -85,6 +85,13 @@ MonoBehaviour:
   charController: {fileID: 4859001485501116549}
   playerModel: {fileID: 8523958498641456204}
   anim: {fileID: 5689612864945495758}
+  isKnocking: 0
+  knockBackLenght: 0.5
+  knockBackPower: {x: 3, y: 8}
+  playerPieces:
+  - {fileID: 8894560873215732981}
+  - {fileID: 8405861898908853175}
+  - {fileID: 7015658034654187579}
 --- !u!143 &4859001485501116549
 CharacterController:
   m_ObjectHideFlags: 0
@@ -181,8 +188,23 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8204456022665551295, guid: 73372dc632d43aa4eb43610c78ce94b5, type: 3}
   m_PrefabInstance: {fileID: 2945054793838070239}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7015658034654187579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5296919759083411940, guid: 73372dc632d43aa4eb43610c78ce94b5, type: 3}
+  m_PrefabInstance: {fileID: 2945054793838070239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8405861898908853175 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6663481812439034472, guid: 73372dc632d43aa4eb43610c78ce94b5, type: 3}
+  m_PrefabInstance: {fileID: 2945054793838070239}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8523958498641456204 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6815565458368210323, guid: 73372dc632d43aa4eb43610c78ce94b5, type: 3}
+  m_PrefabInstance: {fileID: 2945054793838070239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8894560873215732981 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6030667647905637674, guid: 73372dc632d43aa4eb43610c78ce94b5, type: 3}
   m_PrefabInstance: {fileID: 2945054793838070239}
   m_PrefabAsset: {fileID: 0}
